@@ -194,7 +194,7 @@ resource "aws_security_group" "netskope_sdwan_gw_public_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.aws_network_config.management_cidr_blocks
   }
 
   ingress {

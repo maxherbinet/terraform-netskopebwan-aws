@@ -15,5 +15,5 @@ provider "aws" {
 
 provider "netskopebwan" {
   baseurl  = local.tenant_api_url
-  apitoken = var.netskope_tenant.tenant_token
+  apitoken = sensitive(var.netskope_tenant.tenant_token)
 }

@@ -26,7 +26,7 @@ resource "aws_instance" "client_instance" {
   instance_type     = var.clients.instance_type
   availability_zone = data.aws_availability_zones.aws_availability_zone.names[0]
   key_name          = var.aws_instance.keypair
-  user_data = templatefile("modules/clients/scripts/user-data.sh",
+  user_data = templatefile("${path.module}/scripts/user-data.sh",
     {
       password = var.clients.password
     }

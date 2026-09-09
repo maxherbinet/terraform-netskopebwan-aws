@@ -36,7 +36,7 @@ resource "aws_network_interface" "netskope_sdwan_secondary_gw_ip" {
 
 resource "aws_eip" "netskope_sdwan_primary_gw_eip" {
   for_each                  = local.primary_public_overlay_interfaces
-  vpc                       = true
+  domain                    = "vpc"
   network_interface         = aws_network_interface.netskope_sdwan_primary_gw_ip[each.key].id
   associate_with_private_ip = tolist(aws_network_interface.netskope_sdwan_primary_gw_ip[each.key].private_ips)[0]
   tags = {
@@ -46,7 +46,7 @@ resource "aws_eip" "netskope_sdwan_primary_gw_eip" {
 
 resource "aws_eip" "netskope_sdwan_secondary_gw_eip" {
   for_each                  = var.netskope_gateway_config.ha_enabled ? local.secondary_public_overlay_interfaces : {}
-  vpc                       = true
+  domain                    = "vpc"
   network_interface         = aws_network_interface.netskope_sdwan_secondary_gw_ip[each.key].id
   associate_with_private_ip = tolist(aws_network_interface.netskope_sdwan_secondary_gw_ip[each.key].private_ips)[0]
   tags = {

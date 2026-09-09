@@ -18,7 +18,7 @@ resource "aws_instance" "netskope_sdwan_gw_instance" {
   ami               = local.netskope_gw_image_id
   instance_type     = var.aws_instance.instance_type
   availability_zone = var.aws_network_config.primary_zone
-  user_data = templatefile("modules/aws_ec2/scripts/user-data.sh",
+  user_data = templatefile("${path.module}/scripts/user-data.sh",
     {
       netskope_gw_default_password = var.netskope_gateway_config.gateway_password,
       netskope_tenant_url          = var.netskope_tenant.tenant_url,
@@ -49,7 +49,7 @@ resource "aws_instance" "netskope_sdwan_ha_gw_instance" {
   ami               = local.netskope_gw_image_id
   instance_type     = var.aws_instance.instance_type
   availability_zone = var.aws_network_config.secondary_zone
-  user_data = templatefile("modules/aws_ec2/scripts/user-data.sh",
+  user_data = templatefile("${path.module}/scripts/user-data.sh",
     {
       netskope_gw_default_password = var.netskope_gateway_config.gateway_password,
       netskope_tenant_url          = var.netskope_tenant.tenant_url,

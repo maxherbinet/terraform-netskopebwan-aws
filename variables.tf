@@ -55,6 +55,7 @@ variable "aws_network_config" {
       public  = optional(string, "")
       private = optional(string, "")
     }), { public = "", private = "" })
+    management_cidr_blocks = optional(list(string), ["0.0.0.0/0"]) # Source CIDRs allowed to SSH (22) into the gateways. Defaults to the open internet to match prior behavior; scope this to your management/VPN CIDR(s).
   })
 }
 
@@ -83,10 +84,11 @@ variable "aws_transit_gw" {
 variable "aws_instance" {
   description = "AWS Instance Config"
   type = object({
-    keypair       = optional(string, "")
-    instance_type = optional(string, "t3.medium")
-    ami_name      = optional(string, "Infiot-Edge_R1.4.109")
-    ami_owner     = optional(string, "aws-marketplace")
+    keypair           = optional(string, "")
+    instance_type     = optional(string, "t3.medium")
+    ami_ssm_parameter = optional(string, "/aws/service/marketplace/prod-jenciju7u4bvk/r6.3.371") # Netskope Borderless SD-WAN Gateway release, resolved via the AWS Marketplace SSM alias. Set to "" to fall back to the ami_name/ami_owner lookup below.
+    ami_name          = optional(string, "")                                                     # Fallback only, used when ami_ssm_parameter is "". Name-prefix lookup against ami_owner's AMIs.
+    ami_owner         = optional(string, "aws-marketplace")
   })
   default = {
     keypair = ""
@@ -120,6 +122,11 @@ variable "netskope_gateway_config" {
     dns_secondary    = optional(string, "8.8.4.4")   # Secondary DNS
     gateway_data     = optional(any)                 # It will be auto-computed
   })
+
+  validation {
+    condition     = contains(["spoke", "hub"], var.netskope_gateway_config.gateway_role)
+    error_message = "netskope_gateway_config.gateway_role must be either \"spoke\" or \"hub\"."
+  }
 }
 
 ###############################

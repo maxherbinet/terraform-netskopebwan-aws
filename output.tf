@@ -32,5 +32,6 @@ output "secondary-gw-gre-config" {
 }
 
 output "client-details" {
-  value = var.clients.create_clients ? local.client-login : null
+  value     = var.clients.create_clients ? local.client-login : null
+  sensitive = true # Contains the demo client's login password.
 }

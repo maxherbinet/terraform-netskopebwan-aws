@@ -26,6 +26,12 @@ This module creates / configures the following objects in AWS and Netskop SD-WAN
 
 - The default username for the gateway is "infiot". Password authentication is disabled and you must use SSH keys to authenticate.
   This module has an option to set the password for the default username "infiot". This will be used only for console access.
+- The gateway release defaults to Netskope Borderless SD-WAN **R6.3.371**, resolved via the AWS Marketplace SSM parameter alias
+  (`aws_instance.ami_ssm_parameter`, default `/aws/service/marketplace/prod-jenciju7u4bvk/r6.3.371`). This pins an exact, region-correct
+  AMI without relying on name-prefix matching. To pin a different release, either point `ami_ssm_parameter` at that release's alias, or
+  set it to `""` and use the legacy `ami_name`/`ami_owner` name-prefix lookup instead.
+- SSH access to the gateway's public interface is controlled by `aws_network_config.management_cidr_blocks` (defaults to `0.0.0.0/0`
+  to match prior behavior). Restrict it to your management/VPN CIDR(s) before deploying anything beyond a lab environment.
 
 ## Known Limitations
 
