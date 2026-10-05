@@ -122,6 +122,7 @@ variable "netskope_gateway_config" {
     dns_secondary    = optional(string, "8.8.4.4")   # Secondary DNS
     gateway_data     = optional(any)                 # It will be auto-computed
   })
+  default = {}
 
   validation {
     condition     = contains(["spoke", "hub"], var.netskope_gateway_config.gateway_role)
